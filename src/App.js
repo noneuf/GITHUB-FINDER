@@ -13,7 +13,9 @@ class App extends Component {
 
   async componentDidMount() {
     this.setState({ loading: true });
-    const res = await axios.get(`https://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
+    const res = await axios.get(
+      `https://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}` //global variable that are defined in the local.env file
+    );
     this.setState({ users: res.data, loading: false });
     console.log(this.users);
   }
