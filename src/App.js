@@ -1,25 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
+import Navbar from './component/layout/Navbar';
+import Users from './component/users/Users';
+import React, { Component } from 'react'; //!! we use destructturing here !! So down there line 4 we would have written React.Component instead of Component
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      // Fragment is a ghost ellement, we use it instead of a div for example.
+      <div className='App'>
+        <Navbar title='Github Finder' icon='fab fa-github' />
+        <div className='container'>
+          <Users />
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
