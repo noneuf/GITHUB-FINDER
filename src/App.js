@@ -2,6 +2,7 @@ import React, { Component } from 'react'; //!! we use destructturing here !! So 
 import Navbar from './component/layout/Navbar';
 import Users from './component/users/Users';
 import Search from './component/users/Search';
+import Alert from './component/layout/Alert';
 import axios from 'axios';
 import './App.css';
 
@@ -9,6 +10,7 @@ class App extends Component {
   state = {
     users: [],
     loading: false,
+    alert: null,
   };
 
   // async componentDidMount() {
@@ -20,6 +22,7 @@ class App extends Component {
   // }
 
   searchUsers = async (text) => {
+    this.setState({ alert: null });
     const res = await axios.get(
       `https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}` //global variable that are defined in the local.env file
     );
@@ -28,6 +31,11 @@ class App extends Component {
 
   clearUsers = () => {
     this.setState({ users: [], loading: false });
+  };
+
+  setAlert = (msg, type) => {
+    this.setState({ alert: { msg: msg, type: type } });
+    setTimeout(() => this.setState({ alert: null }), 5000);
   };
 
   render() {
@@ -40,10 +48,12 @@ class App extends Component {
       <div className='App'>
         <Navbar title='Github Finder' icon='fab fa-github' />
         <div className='container'>
+          <Alert alert={this.state.alert} />
           <Search
             searchUsers={this.searchUsers}
             clearUsers={this.clearUsers}
             showClear={users.length > 0 ? true : false}
+            setAlert={this.setAlert}
           />
           <Users loading={loading} users={users} />
         </div>
