@@ -57,7 +57,7 @@ const UserItem = ({ user: { avatar_url, login, html_url } }) => {
 };
 
 UserItem.prototype = {
-  user: /* shortcut ptor */ PropTypes.object.isRequired, //user is an object that as several propsso we defined it as an object that is required
+  user: /* shortcut ptor */ PropTypes.object.isRequired, //user is an object that as several props so we defined it as an object that is required
 };
 
 export default UserItem;

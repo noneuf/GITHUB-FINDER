@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import UserItem from './UserItem';
 import Spinner from '../layout/Spinner';
-import propTypes from 'prop-types'
+import propTypes from 'prop-types';
 
-// class Users extends Component { //was a class based component, now is a functional component since we do not use states in it
+// class Users extends Component {
+//   //was a class based component, now is a functional component since we do not use states in it
 //   // state = { //this is no longer used since we pass our state from the main component (App) as props in this component
 //   //   users: [
 //   //     {
@@ -41,27 +42,27 @@ import propTypes from 'prop-types'
 //   }
 // }
 
-const Users = ({users, loading}) => {
-    if(loading) {
-      return <Spinner />
-    }
-    return (
-      <div style={userStyle /* ref=style as a variable*/}>
-        {users.map(
-          (
-            user //it was "this.state.users..." when the state was comming from this component
-          ) => (
-            <UserItem key={user.id} user={user} /> //here user is a prop that is passed to the userItem
-          )
-        )}
-      </div>
-    );
-}
+const Users = ({ users, loading }) => {
+  if (loading) {
+    return <Spinner />;
+  }
+  return (
+    <div style={userStyle /* ref=style as a variable*/}>
+      {users.map(
+        (
+          user //it was "this.state.users..." when the state was comming from this component
+        ) => (
+          <UserItem key={user.id} user={user} /> //here user is a prop that is passed to the userItem
+        )
+      )}
+    </div>
+  );
+};
 
 Users.propTypes = {
   users: propTypes.array.isRequired,
-  loading: propTypes.bool.isRequired
-}
+  loading: propTypes.bool.isRequired,
+};
 
 const userStyle = {
   display: 'grid',
