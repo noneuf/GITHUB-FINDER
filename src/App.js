@@ -1,8 +1,10 @@
-import React, { Component } from 'react'; //!! we use destructturing here !! So down there line 4 we would have written React.Component instead of Component
+import React, { Fragment, Component } from 'react'; //!! we use destructturing here !! So down there line 4 we would have written React.Component instead of Component
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from './component/layout/Navbar';
 import Users from './component/users/Users';
 import Search from './component/users/Search';
 import Alert from './component/layout/Alert';
+import About from './component/pages/About';
 import axios from 'axios';
 import './App.css';
 
@@ -34,7 +36,7 @@ class App extends Component {
   };
 
   setAlert = (msg, type) => {
-    this.setState({ alert: { msg: msg, type: type } });
+    this.setState({ alert: { msg: msg, type: type } }); //could be simplified using msg, type since the key and the value are the same
     setTimeout(() => this.setState({ alert: null }), 5000);
   };
 
@@ -45,19 +47,33 @@ class App extends Component {
       // ref: passing states to the child component (Users) from the parent component (App)
 
       //To understand how users are shearched check this link: https://www.udemy.com/course/modern-react-front-to-back/learn/lecture/14969828#questions
-      <div className='App'>
-        <Navbar title='Github Finder' icon='fab fa-github' />
-        <div className='container'>
-          <Alert alert={this.state.alert} />
-          <Search
-            searchUsers={this.searchUsers}
-            clearUsers={this.clearUsers}
-            showClear={users.length > 0 ? true : false}
-            setAlert={this.setAlert}
-          />
-          <Users loading={loading} users={users} />
+      <Router>
+        <div className='App'>
+          <Navbar title='Github Finder' icon='fab fa-github' />
+          <div className='container'>
+            <Alert alert={this.state.alert} />
+            <Switch>
+              <Route
+                exact
+                path='/'
+                render={(props) => (
+                  <Fragment>
+                    <Search
+                      searchUsers={this.searchUsers}
+                      clearUsers={this.clearUsers}
+                      showClear={users.length > 0 ? true : false}
+                      setAlert={this.setAlert}
+                    />
+                    <Users loading={loading} users={users} />
+                  </Fragment>
+                )}
+              />
+              <Route exact path='/about' component={About} />
+              {/**There is only one component in this Route so we can implement it like that: component={About} instead of: render={(props) => <About />} */}
+            </Switch>
+          </div>
         </div>
-      </div>
+      </Router>
     );
   }
 }
