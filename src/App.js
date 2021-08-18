@@ -2,6 +2,7 @@ import React, { Fragment, Component } from 'react'; //!! we use destructturing h
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from './component/layout/Navbar';
 import Users from './component/users/Users';
+import User from './component/users/User';
 import Search from './component/users/Search';
 import Alert from './component/layout/Alert';
 import About from './component/pages/About';
@@ -11,6 +12,7 @@ import './App.css';
 class App extends Component {
   state = {
     users: [],
+    user: {},
     loading: false,
     alert: null,
   };
@@ -31,6 +33,16 @@ class App extends Component {
     this.setState({ users: res.data.items, loading: false });
   };
 
+  // Get single Github user
+  getUser = async (username) => {
+    this.setState({ loading: true });
+    const res = await axios.get(
+      `https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}` //global variable that are defined in the local.env file
+    );
+    this.setState({ user: res.data, loading: false });
+  };
+
+  //Clear users from state
   clearUsers = () => {
     this.setState({ users: [], loading: false });
   };
@@ -41,7 +53,7 @@ class App extends Component {
   };
 
   render() {
-    const { users, loading } = this.state;
+    const { users, loading, user } = this.state;
     return (
       // Fragment is a ghost ellement, we use it instead of a div for example.
       // ref: passing states to the child component (Users) from the parent component (App)
@@ -70,6 +82,20 @@ class App extends Component {
               />
               <Route exact path='/about' component={About} />
               {/**There is only one component in this Route so we can implement it like that: component={About} instead of: render={(props) => <About />} */}
+              <Route
+                exact
+                path='/user/:login'
+                render={(props) => (
+                  <User
+                    {...props}
+                    getUser={this.getUser}
+                    user={user}
+                    loading={loading}
+                  />
+                )}
+              />
+              {/** ...props ==>> spread operator, go here to remind what it is: https://www.youtube.com/watch?v=iLx4ma8ZqvQ*/}
+              {/**user and loading are destructured at the renders begening so we do not need to write this.state.user/loading*/}
             </Switch>
           </div>
         </div>
