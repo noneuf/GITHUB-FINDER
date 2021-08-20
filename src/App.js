@@ -15,6 +15,7 @@ class App extends Component {
     user: {},
     loading: false,
     alert: null,
+    repos: [],
   };
 
   // async componentDidMount() {
@@ -42,6 +43,15 @@ class App extends Component {
     this.setState({ user: res.data, loading: false });
   };
 
+  // Get users repos
+  getUserRepos = async (username) => {
+    this.setState({ loading: true });
+    const res = await axios.get(
+      `https://api.github.com/users/${username}/repos?per_page=10&sort=created:asc&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}` //global variable that are defined in the local.env file
+    );
+    this.setState({ repos: res.data, loading: false });
+  };
+
   //Clear users from state
   clearUsers = () => {
     this.setState({ users: [], loading: false });
@@ -53,7 +63,7 @@ class App extends Component {
   };
 
   render() {
-    const { users, loading, user } = this.state;
+    const { users, loading, user, repos } = this.state;
     return (
       // Fragment is a ghost ellement, we use it instead of a div for example.
       // ref: passing states to the child component (Users) from the parent component (App)
@@ -89,7 +99,9 @@ class App extends Component {
                   <User
                     {...props}
                     getUser={this.getUser}
+                    getUserRepos={this.getUserRepos}
                     user={user}
+                    repos={repos}
                     loading={loading}
                   />
                 )}
